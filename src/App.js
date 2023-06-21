@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './styles/App.css';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Counter from './components/Counter';
 import ClassCounter from './components/ClassCounter';
 import PostItem from './components/PostItem';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
-
+import MyInput from './components/UI/input/MyInput';
 
 
 function App() {
@@ -15,13 +15,25 @@ function App() {
     {id:2, title:"Javascript", desc:'React Полный курс от А до Я.'},
   ]);  
 
+  const [title, setTitle] = useState('');
+  const bodyInputRef = useRef();
+
+  const addNewPost = (e) => {
+      e.preventDefault();
+      console.log(title);
+      console.log(bodyInputRef.current.value);
+
+  }
 
   return (
     <div className="App">
         <form>
-          <input type='text' name="title" placeholder='Title'/><br></br>
-          <input type='text' name="desc" placeholder='Description'/><br></br>
-          <MyButton disabled>Create</MyButton>
+          {/* Управляемый  компонент */}
+          <MyInput type='text' name="title" placeholder='Title' value={title} onChange={event => setTitle(event.target.value)}/><br></br>
+          
+          {/* Неуправляемый или неконтролируемый компонент */}
+          <MyInput type='text' name="desc" placeholder='Description' ref={bodyInputRef}/><br></br>
+          <MyButton onClick={addNewPost}>Create</MyButton>
         </form>
 
 
