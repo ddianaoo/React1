@@ -19,10 +19,20 @@ function App() {
     setPosts([...posts, newPost]);
   };
 
+  const deletePost = (post) => {
+    setPosts(posts.filter(p => p.id !== post.id));
+  };
+
   return (
     <div className="App">
         <PostForm create={createPost}/>
-        <PostList posts={posts} title='List of Posts1'/>
+
+      {/* Тернарный оператор */}
+        {posts.length !== 0 
+        ?<PostList del={deletePost} posts={posts} title='List of Posts1'/>
+        :<h1>There is no post</h1>
+        }
+        
     </div>
   );
 }
