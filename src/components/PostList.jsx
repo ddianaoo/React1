@@ -11,8 +11,8 @@ const PostList = ({posts, title}) => {
     return (
         <div>
                   <h1>{title}</h1>
-      {posts.map( post =>
-              <PostItem item={post} key={post.id}/>
+      {posts.map( (post, index) =>
+              <PostItem item={post} number={index + 1} key={post.id}/>
         )}
 
         {/* <PostItem item={{id:1, title:"title1", desc:'React Полный курс от А до Я.'}}/> */}

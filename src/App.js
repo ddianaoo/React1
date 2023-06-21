@@ -16,13 +16,21 @@ function App() {
   ]);  
 
   const [title, setTitle] = useState('');
-  const bodyInputRef = useRef();
+  const [desc, setDesc] = useState('');
 
   const addNewPost = (e) => {
       e.preventDefault();
-      console.log(title);
-      console.log(bodyInputRef.current.value);
-
+      // console.log(title);
+      // console.log(desc);
+      const newPost = {
+        id: Date.now(),
+        title, 
+        desc
+      };
+      setPosts([...posts, newPost]);
+      console.log(newPost);
+      setTitle('');
+      setDesc('');
   }
 
   return (
@@ -30,9 +38,7 @@ function App() {
         <form>
           {/* Управляемый  компонент */}
           <MyInput type='text' name="title" placeholder='Title' value={title} onChange={event => setTitle(event.target.value)}/><br></br>
-          
-          {/* Неуправляемый или неконтролируемый компонент */}
-          <MyInput type='text' name="desc" placeholder='Description' ref={bodyInputRef}/><br></br>
+          <MyInput type='text' name="desc" placeholder='Description' value={desc} onChange={event => setDesc(event.target.value)}/><br></br>
           <MyButton onClick={addNewPost}>Create</MyButton>
         </form>
 
