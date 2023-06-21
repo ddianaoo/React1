@@ -21,6 +21,7 @@ function App() {
     {id:5, title:"Python", desc:'Python Полный курс от А до Я.'}
   ]);
 
+
   return (
     <div className="App">
         <PostList posts={posts} title='List of Posts1'/>
