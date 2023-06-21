@@ -5,6 +5,7 @@ import Counter from './components/Counter';
 import ClassCounter from './components/ClassCounter';
 import PostItem from './components/PostItem';
 import PostList from './components/PostList';
+import MyButton from './components/UI/button/MyButton';
 
 
 
@@ -13,19 +14,18 @@ function App() {
     {id:1, title:"Javascript", desc:'React Полный курс от А до Я.'},
     {id:2, title:"Javascript", desc:'React Полный курс от А до Я.'},
   ]);  
-  const [posts2, setPosts2] = useState([
-    {id:1, title:"Python", desc:'Python Полный курс от А до Я.'},
-    {id:2, title:"Python", desc:'Python Полный курс от А до Я.'},
-    {id:3, title:"Python", desc:'Python Полный курс от А до Я.'},
-    {id:4, title:"Python", desc:'Python Полный курс от А до Я.'},
-    {id:5, title:"Python", desc:'Python Полный курс от А до Я.'}
-  ]);
 
 
   return (
     <div className="App">
+        <form>
+          <input type='text' name="title" placeholder='Title'/><br></br>
+          <input type='text' name="desc" placeholder='Description'/><br></br>
+          <MyButton disabled>Create</MyButton>
+        </form>
+
+
         <PostList posts={posts} title='List of Posts1'/>
-        <PostList posts={posts2} title='List of Posts2'/>
     </div>
   );
 }
