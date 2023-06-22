@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './styles/App.css';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PostItem from './components/PostItem';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
@@ -11,22 +11,21 @@ import MySelect from './components/UI/select/MySelect';
 
 function App() {
   const [posts, setPosts] = useState([
-    {id:1, title:"Javascript 2", desc:'Javascript 2'},
+    {id:1, title:"Jabvascript 2", desc:'Javascript 2'},
     {id:2, title:"Javascript", desc:'Javascript'},
   ]);  
 
   const [selectedSort, setSelectedSort] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  function getSortedPosts() {
-    console.log('getSortedPosts is workingggg!!!!!!!!');
+
+  const sortedPosts = useMemo(() => {
+    console.log('useMemo is workingggg!!!!!!!!');
     if (selectedSort) {
       return [...posts].sort((a,b) => a[selectedSort].localeCompare(b[selectedSort]) );
     } 
       return posts;
-  }
-
-  const sortedPosts = getSortedPosts();
+  }, [selectedSort, posts]);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -40,6 +39,9 @@ function App() {
     setSelectedSort(sort);
   };
 
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  }, [searchQuery, sortedPosts]);
 
   return (
     <div className="App">
@@ -67,8 +69,8 @@ function App() {
         </div>
 
       {/* Тернарный оператор */}
-        {posts.length !== 0 
-        ?<PostList del={deletePost} posts={sortedPosts} title='List of Posts1'/>
+        {sortedAndSearchedPosts.length !== 0 
+        ?<PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts1'/>
         :<h1>There is no post</h1>
         }
         
