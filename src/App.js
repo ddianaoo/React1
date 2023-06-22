@@ -16,7 +16,17 @@ function App() {
   ]);  
 
   const [selectedSort, setSelectedSort] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
+  function getSortedPosts() {
+    console.log('getSortedPosts is workingggg!!!!!!!!');
+    if (selectedSort) {
+      return [...posts].sort((a,b) => a[selectedSort].localeCompare(b[selectedSort]) );
+    } 
+      return posts;
+  }
+
+  const sortedPosts = getSortedPosts();
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -27,9 +37,7 @@ function App() {
   };
 
   const sortPosts = (sort) => {
-    console.log(sort);
     setSelectedSort(sort);
-    setPosts([...posts].sort((a,b) => a[sort].localeCompare(b[sort]) ));
   };
 
 
@@ -39,6 +47,14 @@ function App() {
 
         <hr style={{margin:'15px 0'}}/>
         <div>
+
+          <MyInput 
+          type='text' 
+          placeholder='Search' 
+          value={searchQuery} 
+          onChange={event => setSearchQuery(event.target.value)}
+          />
+
           <MySelect 
           onChange={sortPosts}
           value={selectedSort}
@@ -52,7 +68,7 @@ function App() {
 
       {/* Тернарный оператор */}
         {posts.length !== 0 
-        ?<PostList del={deletePost} posts={posts} title='List of Posts1'/>
+        ?<PostList del={deletePost} posts={sortedPosts} title='List of Posts1'/>
         :<h1>There is no post</h1>
         }
         
