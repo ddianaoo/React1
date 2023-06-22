@@ -1,14 +1,9 @@
-import logo from './logo.svg';
 import './styles/App.css';
 import React, { useMemo, useRef, useState } from 'react';
-import PostItem from './components/PostItem';
 import PostList from './components/PostList';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from './components/UI/input/MyInput';
 import PostForm from './components/PostForm';
-import MySelect from './components/UI/select/MySelect';
 import PostFilter from './components/PostFilter';
-
+import MyModal from './components/UI/MyModal/MyModal';
 
 
 function App() {
@@ -42,7 +37,9 @@ function App() {
 
   return (
     <div className="App">
+      <MyModal>
         <PostForm create={createPost}/>
+      </MyModal>
 
         <hr style={{margin:'15px 0'}}/>
 
