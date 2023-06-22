@@ -47,12 +47,8 @@ function App() {
         <hr style={{margin:'15px 0'}}/>
 
         <PostFilter filter={filter} setFilter={setFilter}/>
-
-      {/* Тернарный оператор */}
-        {sortedAndSearchedPosts.length !== 0 
-        ?<PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts1'/>
-        :<h1>There is no post</h1>
-        }
+        
+        <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts1'/>
         
     </div>
   );
