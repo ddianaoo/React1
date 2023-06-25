@@ -4,6 +4,7 @@ import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostFilter from './components/PostFilter';
 import MyModal from './components/UI/MyModal/MyModal';
+import MyButton from './components/UI/button/MyButton';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   };
 
   const deletePost = (post) => {
@@ -35,9 +37,13 @@ function App() {
     return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
   }, [filter.query, sortedPosts]);
 
+  const [modal, setModal] = useState(false);
+
   return (
     <div className="App">
-      <MyModal>
+
+      <MyButton style={{marginTop: 25}} onClick={() => setModal(true)}>Create post</MyButton>
+      <MyModal visible={modal} setVisisble={setModal}>
         <PostForm create={createPost}/>
       </MyModal>
 
