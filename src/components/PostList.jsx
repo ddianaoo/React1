@@ -1,17 +1,30 @@
 import React, { useState }  from 'react';
 import PostItem from './PostItem';
+import {
+    CSSTransition,
+    TransitionGroup,
+  } from 'react-transition-group';
+
 
 
 const PostList = ({del, posts, title}) => {
     if (posts.length) {
     return (
         <div>
-                  <h1>{title}</h1>
-      {posts.map( (post, index) =>
-              <PostItem item={post} number={index + 1} key={post.id} del={del}/>
-        )}
+            <h1>{title}</h1>
 
-        {/* <PostItem item={{id:1, title:"title1", desc:'React Полный курс от А до Я.'}}/> */}
+            <TransitionGroup>
+
+                {posts.map( (post, index) => 
+                <CSSTransition
+                    key={post.id}
+                    timeout={500}
+                    classNames="post"
+                >
+                    <PostItem item={post} number={index + 1} del={del}/>
+                </CSSTransition>
+                )}
+            </TransitionGroup>
         </div>
     )}
     return <h1>There is no post</h1>
