@@ -27,7 +27,7 @@ const PostList = ({del, posts, title}) => {
             </TransitionGroup>
         </div>
     )}
-    return <h1>There is no post</h1>
+    return <h1>Posts not found</h1>
 };
 
 export default PostList;

@@ -8,6 +8,7 @@ import MyButton from './components/UI/button/MyButton';
 import {usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
+import { usePulling } from './hooks/usePulling';
 
 
 
@@ -16,7 +17,11 @@ function App() {
   const [filter, setFilter] = useState({sort:'', query:''});
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
   const [modal, setModal] = useState(false);
-  const [isPostsLoading, setIsPostsLoading] = useState(false);
+
+  const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
+    const posts = await PostService.getAll();
+    setPosts(posts);
+  })
 
   useEffect(() =>{
     pulledPosts();
@@ -31,18 +36,6 @@ function App() {
     setPosts(posts.filter(p => p.id !== post.id));
   };
 
-  async function pulledPosts() {
-    setIsPostsLoading(true);
-    // setTimeout(async () => {
-    //   const posts = await PostService.getAll();
-    //   setPosts(posts);
-    //   setIsPostsLoading(false);
-    // }, 2000);
-    const posts = await PostService.getAll();
-    setPosts(posts);
-    setIsPostsLoading(false);
-  }
-
   return (
     <div className="App">
 
@@ -55,12 +48,13 @@ function App() {
 
         <PostFilter filter={filter} setFilter={setFilter}/>
 
+        {postError && <h1>Error happened {postError}</h1>}
+
         {isPostsLoading
           ? <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
           : <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
         }        
       
-        
     </div>
   );
 }
