@@ -6,8 +6,9 @@ import PostFilter from './components/PostFilter';
 import MyModal from './components/UI/MyModal/MyModal';
 import MyButton from './components/UI/button/MyButton';
 import {usePosts } from './hooks/usePosts';
-import axios from 'axios';
 import PostService from './API/PostService';
+import Loader from './components/UI/Loader/Loader';
+
 
 
 function App() {
@@ -31,8 +32,15 @@ function App() {
   };
 
   async function pulledPosts() {
+    setIsPostsLoading(true);
+    // setTimeout(async () => {
+    //   const posts = await PostService.getAll();
+    //   setPosts(posts);
+    //   setIsPostsLoading(false);
+    // }, 2000);
     const posts = await PostService.getAll();
     setPosts(posts);
+    setIsPostsLoading(false);
   }
 
   return (
@@ -46,7 +54,12 @@ function App() {
         <hr style={{margin:'15px 0'}}/>
 
         <PostFilter filter={filter} setFilter={setFilter}/>
-        <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
+
+        {isPostsLoading
+          ? <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
+          : <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
+        }        
+      
         
     </div>
   );
