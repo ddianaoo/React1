@@ -9,7 +9,7 @@ import {usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
 import { usePulling } from './hooks/usePulling';
-
+import {getPageCount} from './utils/pages.js';
 
 
 function App() {
@@ -18,14 +18,23 @@ function App() {
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
   const [modal, setModal] = useState(false);
 
-  const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts);
-  })
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
+  const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
+    const response = await PostService.getAll(limit, page);
+    setPosts(response.data);
+    const totalCount = response.headers['x-total-count'];
+    setTotalPages(getPageCount(limit, totalCount));
+  });
+
+
+  // console.log(totalPages);
+  
   useEffect(() =>{
     pulledPosts();
-  }, [])
+  }, []);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
