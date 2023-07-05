@@ -24,7 +24,7 @@ function App() {
 
   let PagesArray = getPagesArray(totalPages);
 
-  const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
+  const [pulledPosts, isPostsLoading, postError] = usePulling(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
     setPosts(response.data);
     const totalCount = response.headers['x-total-count'];
@@ -35,8 +35,8 @@ function App() {
   // console.log(totalPages);
   
   useEffect(() =>{
-    pulledPosts();
-  }, [page]);
+    pulledPosts(limit, page);
+  }, []);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -49,6 +49,7 @@ function App() {
 
   const changePage = (page) => {
     setPage(page);
+    pulledPosts(limit, page);
   }
 
 
