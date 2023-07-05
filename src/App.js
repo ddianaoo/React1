@@ -9,7 +9,7 @@ import {usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
 import { usePulling } from './hooks/usePulling';
-import {getPageCount} from './utils/pages.js';
+import {getPageCount, getPagesArray} from './utils/pages.js';
 
 
 function App() {
@@ -21,13 +21,8 @@ function App() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  let PagesArray = [];
 
-  for (let i = 0; i<totalPages; i++){
-    PagesArray.push(i+1);
-  }
-
-  console.log(PagesArray);
+  let PagesArray = getPagesArray(totalPages);
 
   const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
     const response = await PostService.getAll(limit, page);
@@ -41,7 +36,7 @@ function App() {
   
   useEffect(() =>{
     pulledPosts();
-  }, []);
+  }, [page]);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -51,6 +46,11 @@ function App() {
   const deletePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id));
   };
+
+  const changePage = (page) => {
+    setPage(page);
+  }
+
 
   return (
     <div className="App">
@@ -69,8 +69,20 @@ function App() {
         {isPostsLoading
           ? <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
           : <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
-        }        
-      
+        }
+
+        <div className='page__wrapper'>
+          {PagesArray.map(p =>
+            <span 
+            onClick={() => changePage(p)}
+            key={p} 
+            className={page === p ? 'page page__current' : 'page'}
+            >
+              {p}
+            </span>
+            )}          
+        </div>  
+
     </div>
   );
 }
