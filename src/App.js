@@ -9,7 +9,8 @@ import {usePosts } from './hooks/usePosts';
 import PostService from './API/PostService';
 import Loader from './components/UI/Loader/Loader';
 import { usePulling } from './hooks/usePulling';
-import {getPageCount, getPagesArray} from './utils/pages.js';
+import {getPageCount} from './utils/pages.js';
+import Pagination from './components/UI/pagination/Pagination';
 
 
 function App() {
@@ -22,17 +23,12 @@ function App() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  let PagesArray = getPagesArray(totalPages);
-
   const [pulledPosts, isPostsLoading, postError] = usePulling(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
     setPosts(response.data);
     const totalCount = response.headers['x-total-count'];
     setTotalPages(getPageCount(limit, totalCount));
   });
-
-
-  // console.log(totalPages);
   
   useEffect(() =>{
     pulledPosts(limit, page);
@@ -50,8 +46,7 @@ function App() {
   const changePage = (page) => {
     setPage(page);
     pulledPosts(limit, page);
-  }
-
+  };
 
   return (
     <div className="App">
@@ -72,17 +67,7 @@ function App() {
           : <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
         }
 
-        <div className='page__wrapper'>
-          {PagesArray.map(p =>
-            <span 
-            onClick={() => changePage(p)}
-            key={p} 
-            className={page === p ? 'page page__current' : 'page'}
-            >
-              {p}
-            </span>
-            )}          
-        </div>  
+        <Pagination totalPages={totalPages} page={page} changePage={changePage}/>
 
     </div>
   );
