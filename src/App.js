@@ -21,6 +21,13 @@ function App() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  let PagesArray = [];
+
+  for (let i = 0; i<totalPages; i++){
+    PagesArray.push(i+1);
+  }
+
+  console.log(PagesArray);
 
   const [pulledPosts, isPostsLoading, postError] = usePulling(async () => {
     const response = await PostService.getAll(limit, page);
