@@ -1,0 +1,19 @@
+.page__wrapper {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .page {
+    padding: 10px;
+    border: 1px solid teal;
+    cursor: pointer;
+    color: teal;
+    margin: 5px;
+  }
+  
+  .page__current {
+    background-color: teal;
+    color: white;
+    font-weight: bold;
+  }
