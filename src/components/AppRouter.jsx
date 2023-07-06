@@ -14,7 +14,7 @@ const AppRouter = () => {
         <Route path="/posts/:id" element={<PostIdPage/>}/>
 
         <Route path="/error" element={<Error/>}/>
-        <Route path="/*" element={<Navigate to="/error" replace/>}/>
+        <Route path="/*" element={<Navigate to="/posts" replace/>}/>
     </Routes>            
     );
 };
