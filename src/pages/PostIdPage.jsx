@@ -26,7 +26,6 @@ const PostIdPage = () => {
         pulledComments(params.id);
     }, []);
 
-    console.log(comments);
     return (
         <div>
 
