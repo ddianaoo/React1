@@ -4,16 +4,17 @@ import Posts from '../pages/Posts';
 import Error from '../pages/Error';
 import {  Route, Routes, Navigate } from 'react-router-dom';
 import PostIdPage from '../pages/PostIdPage';
+import {routes} from '../Router/routes'
 
 
 const AppRouter = () => {
     return (
       <Routes>
-        <Route path="/about" element={<About/>}/>
-        <Route path="/posts" element={<Posts/>}/>
-        <Route path="/posts/:id" element={<PostIdPage/>}/>
 
-        <Route path="/error" element={<Error/>}/>
+        {routes.map( el => 
+          <Route path={el.path} Component={el.element}/>
+        )}
+
         <Route path="/*" element={<Navigate to="/posts" replace/>}/>
     </Routes>            
     );
