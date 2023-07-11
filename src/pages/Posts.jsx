@@ -1,5 +1,5 @@
 import '../styles/App.css';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PostList from '../components/PostList';
 import PostForm from '../components/PostForm';
 import PostFilter from '../components/PostFilter';
@@ -11,6 +11,7 @@ import Loader from '../components/UI/Loader/Loader';
 import { usePulling } from '../hooks/usePulling';
 import {getPageCount} from '../utils/pages.js';
 import Pagination from '../components/UI/pagination/Pagination';
+import { useObserver } from '../hooks/useObserver';
 
 
 function Posts() {
@@ -24,7 +25,6 @@ function Posts() {
   const [totalPages, setTotalPages] = useState(0);
 
   const lastElem = useRef();
-  const observer = useRef();
 
   const [pulledPosts, isPostsLoading, postError] = usePulling(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
@@ -33,19 +33,9 @@ function Posts() {
     setTotalPages(getPageCount(limit, totalCount));
   });
   
-  useEffect(() =>{
-    if (isPostsLoading) return;
-    if (observer.current) observer.current.disconnect();
-    let callback = function(entries, observer) {
-      if (entries[0].isIntersecting && page<totalPages) {
-        console.log("we see div");
-        console.log(page);
-        setPage(page+1);
-      }
-    };
-    observer.current = new IntersectionObserver(callback);    
-    observer.current.observe(lastElem.current);
-  }, [isPostsLoading]);
+  useObserver(lastElem, page<totalPages, isPostsLoading, () => {
+      setPage(page + 1);
+  });
 
   useEffect(() =>{
     pulledPosts(limit, page);
@@ -84,8 +74,6 @@ function Posts() {
         {isPostsLoading &&
            <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
         }
-
-        <Pagination totalPages={totalPages} page={page} changePage={changePage}/>
 
     </div>
   );
