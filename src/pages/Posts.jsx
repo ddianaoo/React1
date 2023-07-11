@@ -12,6 +12,7 @@ import { usePulling } from '../hooks/usePulling';
 import {getPageCount} from '../utils/pages.js';
 import Pagination from '../components/UI/pagination/Pagination';
 import { useObserver } from '../hooks/useObserver';
+import MySelect from '../components/UI/select/MySelect';
 
 
 function Posts() {
@@ -39,7 +40,7 @@ function Posts() {
 
   useEffect(() =>{
     pulledPosts(limit, page);
-  }, [page]);
+  }, [page, limit]);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -65,7 +66,17 @@ function Posts() {
         <hr style={{margin:'15px 0'}}/>
 
         <PostFilter filter={filter} setFilter={setFilter}/>
-
+        <MySelect
+          value={limit}
+          onChange={selectedLimit => setLimit(selectedLimit)}
+          defaultValue="limit of pages" 
+          options={[
+            {value:5, name:"5 posts"},
+            {value:10, name:"10 posts"},
+            {value:25, name:"25 posts"},
+            {value:-1, name:"Show all posts"},
+          ]}
+        />
         {postError && <h1>Error happened {postError}</h1>}
 
         <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
