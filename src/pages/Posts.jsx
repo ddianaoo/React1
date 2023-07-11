@@ -23,16 +23,33 @@ function Posts() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  const lastElem = useRef();
+  const observer = useRef();
+
   const [pulledPosts, isPostsLoading, postError] = usePulling(async (limit, page) => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount = response.headers['x-total-count'];
     setTotalPages(getPageCount(limit, totalCount));
   });
   
   useEffect(() =>{
+    if (isPostsLoading) return;
+    if (observer.current) observer.current.disconnect();
+    let callback = function(entries, observer) {
+      if (entries[0].isIntersecting && page<totalPages) {
+        console.log("we see div");
+        console.log(page);
+        setPage(page+1);
+      }
+    };
+    observer.current = new IntersectionObserver(callback);    
+    observer.current.observe(lastElem.current);
+  }, [isPostsLoading]);
+
+  useEffect(() =>{
     pulledPosts(limit, page);
-  }, []);
+  }, [page]);
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
@@ -45,7 +62,6 @@ function Posts() {
 
   const changePage = (page) => {
     setPage(page);
-    pulledPosts(limit, page);
   };
 
   return (
@@ -62,9 +78,11 @@ function Posts() {
 
         {postError && <h1>Error happened {postError}</h1>}
 
-        {isPostsLoading
-          ? <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
-          : <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
+        <PostList del={deletePost} posts={sortedAndSearchedPosts} title='List of Posts'/>
+        <div style={{height:20, background:'teal'}} ref={lastElem}/>
+
+        {isPostsLoading &&
+           <div style={{display:'flex', justifyContent:'center', marginTop: 50 }}><Loader/></div>
         }
 
         <Pagination totalPages={totalPages} page={page} changePage={changePage}/>

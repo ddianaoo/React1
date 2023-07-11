@@ -8,7 +8,6 @@ import { AuthContext } from '../../../context';
 
 const Navbar = () => {
   const {isAuth, setIsAuth} = useContext(AuthContext);
-  console.log(isAuth, 'from navbar');
 
   const logout = () => {
     setIsAuth(false);
